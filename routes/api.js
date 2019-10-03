@@ -38,7 +38,7 @@ module.exports = function (app) {
                         return doc
                     })
 
-                    res.json(doc)
+                    res.json(datas)
                 })
         })
 
@@ -46,7 +46,7 @@ module.exports = function (app) {
             let { title } = req.body;
             //response will contain new book object including at least _id and title
 
-            if (!title) return res.json({ error: 'Book Title is required' });
+            if (!title) return res.send('invalid title');
 
             let book = new Book({
                 title: title,
@@ -73,7 +73,8 @@ module.exports = function (app) {
             if (!bookid) return res.json({ error: 'Book ID is required' });
 
             Book.findOne({ _id: bookid }).exec().then(doc => {
-                res.json(doc)
+                if (!doc) return res.send('no book exists')
+                return res.json(doc)
             })
         })
 
